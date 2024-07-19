@@ -37,7 +37,7 @@ def Web_Scraping(clube):
         WebDriverWait(pagina, 30).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#__next > header > div.upper.wrap > div > div > div.Box.Flex.jdCaQN.jALysY > div > form > input" ))).send_keys(clube)
 
         # Aguarda a opção do clube aparecer na lista de sugestões de pesquisa para poder selecioná-la
-        WebDriverWait(pagina, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#__next > header > div.upper.wrap > div > div > div.Box.Flex.jdCaQN.jALysY > div > div > div.Box.sc-jXbUNg.eJEDPA.cfPkwg > div > div > div:nth-child(1) > a"))).click()
+        WebDriverWait(pagina, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "body > div:nth-child(1) > header > div:nth-child(1) > div > div > div:nth-child(2) > div > div > div:nth-child(3) > div > div > div:nth-child(1) > a"))).click()
 
         # Captura o nome do clube inserido corretamente
         nome_clube = WebDriverWait(pagina, 30).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#__next > main > div.fresnel-container.fresnel-greaterThanOrEqual-mdMin > div > div.Box.Flex.ggRYVx.cQgcrM.Grid.dRBNa > div.Box.clAhaB.Col.bzYVms > div.Box.gIubnq > div > div.Box.Flex.INtcV.ijPrqM > div > div.Box.Flex.dIuVWC.iGVEVf > div.Box.Flex.kIPsJP.inEcLY > h2"))).text
@@ -81,21 +81,23 @@ def Web_Scraping(clube):
             # Clica no botão que exibe a lista de jogadores convocados
             pagina.find_element(By.CSS_SELECTOR,"#__next > main > div.fresnel-container.fresnel-greaterThanOrEqual-mdMin > div > div.Box.Flex.ggRYVx.cQgcrM.Grid.dRBNa > div.Box.clAhaB.Col.bzYVms > div.Box.bhOjZO > div.Box.Flex.ggRYVx.delKRF > div.Box.laShVk > div.Box.cNWmcN > div > div:nth-child(4) > div.Box.Flex.daGDON.gSUrXm > div").click()
             
+            
             # Captura a lista de jogadores convocados
-            lista_jogadores_convocados = pagina.find_elements(By.CSS_SELECTOR, "#portals > div > div > div > div > div.Box.sc-jXbUNg.gxtjVX.cfPkwg.ps.ps--active-x.ps--active-y > div:nth-child(1) > div > a")
-            componente_lista = WebDriverWait(pagina,10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#portals > div > div > div > div > div.Box.sc-jXbUNg.gxtjVX.cfPkwg.ps.ps--active-y")))
+                                                                      
+            lista_jogadores_convocados = pagina.find_elements(By.CSS_SELECTOR, "body > div:nth-child(3) > div > div > div > div > div:nth-child(2) > div:nth-child(1) > div > a")
+            componente_lista = WebDriverWait(pagina,10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "body > div:nth-child(3) > div > div > div > div > div:nth-child(2)")))
 
             for index, info_jogador in enumerate(lista_jogadores_convocados):
                 imagem_jogador = info_jogador.find_element(By.CSS_SELECTOR, "div > img").get_attribute('src') # Captura a imagem do jogador convocado
-                imagem_pais_jogador = info_jogador.find_element(By.CSS_SELECTOR, "div.Box.Flex.ggRYVx.cRYpNI > img").get_attribute('src') # Captura a imagem do pais do jogador convocado
-                nome_jogador = info_jogador.find_element(By.CSS_SELECTOR, "div > div.Box.kUNcqi").text # Captura o nome do jogador convocado
+                imagem_pais_jogador = info_jogador.find_element(By.CSS_SELECTOR, "div:nth-child(3) > img").get_attribute('src') # Captura a imagem do pais do jogador convocado
+                nome_jogador = info_jogador.find_element(By.CSS_SELECTOR, "div > div").text # Captura o nome do jogador convocado
                 jogadores_convocados.append({"imagem_jogador":imagem_jogador, "imagem_pais_jogador":imagem_pais_jogador, "nome_jogador":nome_jogador}) # Cria um array com os jogadores convocados
                 
                 # Se houver mais que 7 jogadores, vai ser feito um scroll na lista de jogadores convocados
                 if index > 7: 
                     pagina.execute_script("arguments[0].scrollBy(0, 300);", componente_lista)
                     time.sleep(1)
-            pagina.find_element(By.CSS_SELECTOR, "#portals > div > div > div > div > div.Box.Flex.ggRYVx.gyrVAS > div > button").click() # Fecha a lista de jogadores
+            pagina.find_element(By.CSS_SELECTOR, "body > div:nth-child(3) > div > div > div > div > div:nth-child(3) > div > button").click() # Fecha a lista de jogadores
             
         except:
             print('Nenhum jogador desta equipe foi convocado')
@@ -129,6 +131,7 @@ def Web_Scraping(clube):
         except:
             print("Não há vídeo de último jogo")
             pass
+
 
         pagina.quit()
         
